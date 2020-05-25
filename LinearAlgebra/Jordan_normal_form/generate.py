@@ -1,5 +1,10 @@
 import numpy as np
 
+# How to use: 
+# J = [[-1,0,0],[0,2,1],[0,0,2]]
+# make_problem_Jordan_normal_form(J)
+
+
 """
 テキトーなユニモジュラ行列を１つ得る
 （単位行列に対して、行or列変形をランダムに繰り返すというアルゴリズム）
@@ -21,14 +26,12 @@ def random_unimodular(n):
     assert abs(np.linalg.det(A) - 1) < 1e-5
     return np.matrix(A)
 
-
 """
 np.matrix形式の行列 A を
 整数成分のリスト形式に変換
 """
 def mat2intlist(A):
     return np.round(A).astype(int).tolist()
-
 
 """
 行列 P,Q,J(ジョルダン標準形),A の情報を
@@ -56,8 +59,6 @@ def show_problem(A):
 def show_ans(P,Q,J,A):
     print("答え")
     print(f"\\[\n{mat2tex(A)}={mat2tex(P)}{mat2tex(J)}{mat2tex(Q)}\\]\n")
-
-
 
 """
 行列 A をtex形式に変換した文字列を返す
@@ -91,11 +92,3 @@ def make_problem_Jordan_normal_form(J, need_info=True, need_ans=True):
     show_problem(A)
     if need_ans: show_ans(P,Q,J,A)
     
-
-
-
-J = [[-1,0,0],[0,2,1],[0,0,2]]
-make_problem_Jordan_normal_form(J, need_info=True, need_ans=True)
-
-
-
