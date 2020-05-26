@@ -1,18 +1,26 @@
 import numpy as np
 
-# How to use: 
+""" How to use?
+example 1:
 # J = [[-1,0,0],[0,2,1],[0,0,2]]
 # make_problem_Jordan_normal_form(J)
 
+example2:
+J = [[-1,0,0,0],[0,2,1,0],[0,0,2,1],[0,0,0,2]]
+make_problem_Jordan_normal_form(J,difficulty=8)
+"""
+
 
 """
-テキトーなユニモジュラ行列を１つ得る
+テキトーな n*n ユニモジュラ行列を１つ得る
 （単位行列に対して、行or列変形をランダムに繰り返すというアルゴリズム）
+difficulty: ユニモジュラ行列の「複雑度」（基本変形の最大回数）
 """
-def random_unimodular(n):
+def random_unimodular(n,difficulty):
     from random import randint, sample
+    if difficulty==None: difficulty = n*3
     A = np.eye(n,n)
-    for _ in range(n*n):
+    for _ in range(difficulty):
         # j-th のベクトルを c 倍して i-th に足す
         i,j = sample(range(n), 2)  
         c, = sample([-2,-1,1,2], 1)
@@ -26,12 +34,14 @@ def random_unimodular(n):
     assert abs(np.linalg.det(A) - 1) < 1e-5
     return np.matrix(A)
 
+
 """
 np.matrix形式の行列 A を
 整数成分のリスト形式に変換
 """
 def mat2intlist(A):
     return np.round(A).astype(int).tolist()
+
 
 """
 行列 P,Q,J(ジョルダン標準形),A の情報を
@@ -60,6 +70,8 @@ def show_ans(P,Q,J,A):
     print("答え")
     print(f"\\[\n{mat2tex(A)}={mat2tex(P)}{mat2tex(J)}{mat2tex(Q)}\\]\n")
 
+
+
 """
 行列 A をtex形式に変換した文字列を返す
 """
@@ -75,11 +87,12 @@ def mat2tex(A):
 ジョルダン標準形が J になるような行列の問題を生成する
 A = PJP^{-1}となる
 つまり、広義固有空間の基底は P の縦ベクトルたちからなる
+difficulty: 問題の難しさ（大きいほど難しい）デフォルトは 3*n
 """
-def make_problem_Jordan_normal_form(J, need_info=True, need_ans=True):
+def make_problem_Jordan_normal_form(J,difficulty=None):
     n = len(J)
-    P = random_unimodular(n)
-    Q = P**(-1) 
+    P = random_unimodular(n,difficulty)
+    Q = np.linalg.inv(P) 
     A = P@np.matrix(J)@Q
 
     # P,Q,A は整数行列であることを確認
@@ -88,7 +101,7 @@ def make_problem_Jordan_normal_form(J, need_info=True, need_ans=True):
     assert np.all(np.abs(Q - np.round(Q)) < 1e-5)
     assert np.all(np.abs(A - np.round(A)) < 1e-5)
 
-    if need_info: show_info(P,Q,J,A)
+    show_info(P,Q,J,A)
     show_problem(A)
-    if need_ans: show_ans(P,Q,J,A)
+    show_ans(P,Q,J,A)
     
