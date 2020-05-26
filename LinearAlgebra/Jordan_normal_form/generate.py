@@ -68,7 +68,7 @@ def show_problem(A):
 """
 def show_ans(P,Q,J,A):
     print("答え")
-    print(f"\\[\n{mat2tex(A)}={mat2tex(P)}{mat2tex(J)}{mat2tex(Q)}\\]\n")
+    print(f"\\[\n{mat2tex(Q)}{mat2tex(A)}{mat2tex(P)}={mat2tex(J)}\\]\n")
 
 
 
